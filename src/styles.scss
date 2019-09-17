@@ -1,0 +1,24 @@
+html {
+  font-family: 'PT Sans', sans-serif;
+}
+.hanzi{
+  font-family: 'Noto Serif SC', serif;
+  font-size: 30px;
+}
+.star{
+  -webkit-filter: grayscale(100%);
+  filter: grayscale(100%);
+}
+.star:hover{
+  filter:none;
+}
+.btn.btn-primary.btn-lg{
+  margin: 5%;
+  font-size: 30px;
+}
+.table {
+  width: 75% !important;
+  margin: 0 auto !important;
+  float: none;
+}
+
