@@ -12,25 +12,23 @@ import {PageEvent} from "@angular/material/paginator";
 })
 export class HskComponent implements OnInit {
   words = [];
-
-  pageIndex:number = 0;
-  pageSize:number = 10;
-  length=this.words.length;
-  pageSizeOptions: number[] = [5, 10, 20];
-  pageEvent: PageEvent;
-  displayedWords = this.words.slice(0,10);
-
   @Input() public src:string;
   @Output() myword= new EventEmitter<string>();
   @Output() chosenFunction= new EventEmitter<string>();
 
-  setPageSizeOptions(setPageSizeOptionsInput: string) {
-    this.pageSizeOptions = setPageSizeOptionsInput.split(',').map(str => +str);
+  pageIndex=0;
+  pageSize=10;
+  length=this.words.length;
+  pageSizeOptions=[5,10,20];
+  pageEvent:PageEvent;
+  displayedWords=this.words.slice(0,10);
+  setPageSizeOptions(pageSizeOption: string) {
+    this.pageSizeOptions=pageSizeOption.split(',').map(str=> +str);
   }
-  changePage(e) {
-    let low = e.pageIndex * e.pageSize;
-    let high = low + e.pageSize;
-    this.displayedWords = this.words.slice(low, high);
+  changePage(e){
+    let low=e.pageIndex*e.pageSize;
+    let high=low+e.pageSize;
+    this.displayedWords= this.words.slice(low,high);
   }
 
   addWord(word:string){
@@ -48,8 +46,6 @@ export class HskComponent implements OnInit {
 
   constructor (private httpService: HttpClient,private flashcard:FlashcardsService, private quizz:QuizService) {
   }
-
-
   ngOnInit () {
     this.httpService.get(this.src).subscribe(
       data => {
