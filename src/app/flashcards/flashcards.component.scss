@@ -1,0 +1,39 @@
+ .questionmark{
+   padding:2px 0;
+   height: 60px;
+  }
+  .pinyin{
+    font-size: 40px;
+  }
+  .translation{
+    font-size: 30px;
+  }
+  .btn{
+    font-size: 25px;
+  }
+  .card{
+    padding:1%;
+    width:60%;
+    border: #557669 1px solid;
+    margin: 0 auto;
+    background-color: #f8f8f8;
+    border-radius: 10px;
+    box-shadow: #ebebeb 1px 1px 3px;
+  }
+  .hrow{
+    height: 200px;
+  }
+  .prow{
+    height:60px;
+  }
+  .trow{
+    height:200px;
+  }
+ @media only screen and (max-width: 768px) {
+   #hanzi{
+     font-size: 60px !important;
+     padding:0.5% 0;
+   }
+ }
+
+

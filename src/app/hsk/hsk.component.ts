@@ -1,23 +1,54 @@
 import {Component, EventEmitter, HostBinding, Inject, Input, OnInit, Output} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import { HttpErrorResponse } from '@angular/common/http';
+import {FlashcardsService} from "../flashcards.service";
+import {QuizService} from "../quiz.service";
+import {PageEvent} from "@angular/material/paginator";
 
 @Component({
-  selector: 'app-hsk3',
-  templateUrl: './hsk3.component.html',
-  styleUrls: ['./hsk3.component.css']
+  selector: 'app-hsk',
+  templateUrl: './hsk.component.html',
+  styleUrls: ['./hsk.component.scss']
 })
-export class Hsk3Component implements OnInit {
+export class HskComponent implements OnInit {
   words = [];
-  @Input() src:string;
+
+  pageIndex:number = 0;
+  pageSize:number = 10;
+  length=this.words.length;
+  pageSizeOptions: number[] = [5, 10, 20];
+  pageEvent: PageEvent;
+  displayedWords = this.words.slice(0,10);
+
+  @Input() public src:string;
   @Output() myword= new EventEmitter<string>();
+  @Output() chosenFunction= new EventEmitter<string>();
+
+  setPageSizeOptions(setPageSizeOptionsInput: string) {
+    this.pageSizeOptions = setPageSizeOptionsInput.split(',').map(str => +str);
+  }
+  changePage(e) {
+    let low = e.pageIndex * e.pageSize;
+    let high = low + e.pageSize;
+    this.displayedWords = this.words.slice(low, high);
+  }
 
   addWord(word:string){
     this.myword.emit(word);
   }
-
-  constructor (private httpService: HttpClient) {
+  flashcards(){
+    this.flashcard.flashcardsSource=this.words;
   }
+  quiz(){
+    this.quizz.quizSource=this.words;
+  }
+  onSelect(section: string){
+    this.chosenFunction.emit(section);
+  }
+
+  constructor (private httpService: HttpClient,private flashcard:FlashcardsService, private quizz:QuizService) {
+  }
+
 
   ngOnInit () {
     this.httpService.get(this.src).subscribe(

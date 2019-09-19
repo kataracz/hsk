@@ -1,1 +1,27 @@
-<p>flashcards works!</p>
+<div class="text-center container">
+  <div class="card">
+    <div class="hrow text-center" style="overflow: auto;padding:1% 0">
+      <p class="hanzi" id="hanzi" *ngIf="!englishFirst" [style.font-size.px]="card.hanzi.length>3?100:120">{{card.hanzi}}</p>
+      <p *ngIf="englishFirst" style="font-size: 35px" class="translation">{{card.translations[0]}}<br>{{card.translations[1]}}<br>{{card.translations[2]}}</p>
+    </div>
+    <div class="prow text-center">
+      <hr>
+      <p *ngIf="qclicked" class="pinyin">{{card.pinyin}}</p>
+      <img class="questionmark" *ngIf="!qclicked" src="assets/questionmark.png" (click)="wannaKnowPinyin()"/>
+    </div>
+    <div class="trow text-center" style="overflow: auto;padding:2% 0">
+      <hr>
+      <p *ngIf="aclicked&&!englishFirst" style="font-size: 25px" class="translation">{{card.translations[0]}}<br>{{card.translations[1]}}<br>{{card.translations[2]}}</p>
+      <p class="hanzi" *ngIf="englishFirst&&aclicked" [style.font-size.px]="card.hanzi.length>3?70:85">{{card.hanzi}}</p>
+      <button class="btn btn-secondary" *ngIf="!aclicked" (click)="wannaKnowAnswer()">Show answer</button>
+    </div>
+  </div>
+  <div style="height: 45px">
+    <img src="/assets/star.png" class="star" style="height:30px;margin:1px"  (click)="this.addWord(this.card)"/><p>Add to My Words</p>
+  </div>
+  <button class="btn btn-secondary" style="margin:1%" (click)="generateCard()">Next card</button><br>
+  <button class="btn btn-secondary" *ngIf="!englishFirst" (click)="wannaKnowEnglishFirst()">I want to guess the hanzi</button>
+  <button class="btn btn-secondary" *ngIf="englishFirst" (click)="wannaKnowEnglishFirst()">I want to guess the english translation</button>
+</div>
+
+

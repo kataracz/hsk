@@ -1,5 +1,20 @@
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
+@import '~bootstrap/dist/css/bootstrap.min.css';
+$primary:#f2d1a8;
+$neutral: #f2f2f2;
+$secondary:#669b7c;
+$secondary-darker:#557669;
+
 html {
   font-family: 'PT Sans', sans-serif;
+  text-shadow: #f8f8f8 1px 1px 2px;
+}
+body {
+  padding-top: 70px;
+  background-image: linear-gradient(to bottom right, rgba(242, 209, 168, 0.6), rgba(235, 235, 235, 0.4)),url("assets/background2.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
 }
 .hanzi{
   font-family: 'Noto Serif SC', serif;
@@ -12,9 +27,19 @@ html {
 .star:hover{
   filter:none;
 }
-.btn.btn-primary.btn-lg{
+.btn.btn-secondary.btn-lg{
   margin: 5%;
   font-size: 30px;
+}
+.btn.btn-secondary{
+  background:$secondary-darker;
+  border-color:$secondary-darker;
+  color: #ebebeb;
+  box-shadow:white 1px 1px 2px;
+}
+.btn.btn-secondary:hover{
+  background: linear-gradient($neutral,$secondary-darker);
+  border-color:$secondary-darker;
 }
 .table {
   width: 75% !important;

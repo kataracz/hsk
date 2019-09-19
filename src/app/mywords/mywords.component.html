@@ -1,13 +1,31 @@
 <div class="row">
-  <div class="col-md-12  d-flex justify-content-center">
-    <div class="btn-group" role="group">
-      <button type="button" class="btn btn-secondary">Flashcards</button>
-      <button type="button" class="btn btn-secondary">Quiz</button>
-    </div>
+  <div class="col-md-12 text-center">
+    <button *ngIf="words.length>=1" type="button" class="btn btn-secondary btn-lg" (click)="flashcards();onSelect('flashcards')">Flashcards</button>
+    <button *ngIf="words.length>=4" type="button" class="btn btn-secondary btn-lg" (click)="quiz();onSelect('quiz')">Quiz</button>
   </div>
 </div>
 <div class="row">
-  <div class="col-md-8">
-    <p>mywords</p>
+  <div class="col-md-12">
+    <div *ngIf="words.length<1" class="container text-center"><p style="font-size: 20px" >There are no saved words.</p></div>
+    <div class="container" *ngIf="words.length>=1">
+    <table class="table"  style="font-size: 20px">
+      <thead>
+      <tr class="row">
+        <th class="col-xs-2 text-center" scope="col">Remove</th>
+        <th class="col-xs-2" scope="col">Hanzi</th>
+        <th class="col-xs-2" scope="col">Pinyin</th>
+        <th class="col-xs-6 text-center" scope="col">Tanslations</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr class="row" *ngFor="let word of words;let i=index">
+        <td class="col-xs-2 text-center"><img src="/assets/remove.png" style="height:30px"  (click)="this.delete(i)"/></td>
+        <td class="col-xs-2 hanzi">{{word.hanzi}}</td>
+        <td class="col-xs-2 ">{{word.pinyin}}</td>
+        <td class="col-xs-6 text-center">{{word.translations}}</td>
+      </tr>
+      </tbody>
+    </table>
+    </div>
   </div>
 </div>

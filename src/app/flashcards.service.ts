@@ -4,6 +4,10 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class FlashcardsService {
+  flashcardsSource=[];
+  getFlashcardsSource(){
+    return this.flashcardsSource;
 
-  constructor() { }
+  }
+
 }

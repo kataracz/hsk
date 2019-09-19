@@ -1,11 +1,14 @@
 <div class="row">
   <div class="col-md-12 text-center">
-      <button type="button" class="btn btn-primary btn-lg">Flashcards</button>
-      <button type="button" class="btn btn-primary btn-lg">Quiz</button>
+      <button type="button" class="btn btn-secondary btn-lg" (click)="flashcards();onSelect('flashcards')">Flashcards</button>
+      <button type="button" class="btn btn-secondary btn-lg" (click)="quiz();onSelect('quiz')">Quiz</button>
   </div>
 </div>
 <div class="row">
   <div class="col-md-12">
+    <div class="container">
+      <mat-paginator #paginator [length]="words.length" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" (page)="changePage($event)" style="background-color: #f8f8f8">
+      </mat-paginator>
     <table class="table" *ngIf="words" style="font-size: 20px">
       <thead>
       <tr class="row">
@@ -16,13 +19,14 @@
       </tr>
       </thead>
       <tbody>
-      <tr class="row" *ngFor="let word of words">
-        <td class="col-xs-2 text-center"><img src="/assets/star.png" id="star" style="height:30px" (click)="this.addWord(word)"/></td>
+      <tr class="row" *ngFor="let word of displayedWords">
+        <td class="col-xs-2 text-center"><img src="/assets/star.png" class="star" style="height:30px"  (click)="this.addWord(word)"/></td>
         <td class="col-xs-2 hanzi">{{word.hanzi}}</td>
         <td class="col-xs-2 ">{{word.pinyin}}</td>
         <td class="col-xs-6 text-center">{{word.translations}}</td>
       </tr>
       </tbody>
     </table>
+    </div>
   </div>
 </div>
