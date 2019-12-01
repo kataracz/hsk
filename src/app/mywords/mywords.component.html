@@ -1,7 +1,8 @@
 <div class="row">
   <div class="col-md-12 text-center">
-    <button *ngIf="words.length>=1" type="button" class="btn btn-secondary btn-lg" (click)="flashcards();onSelect('flashcards')">Flashcards</button>
-    <button *ngIf="words.length>=4" type="button" class="btn btn-secondary btn-lg" (click)="quiz();onSelect('quiz')">Quiz</button>
+    <button *ngIf="words.length>=1" type="button" class="btn btn-secondary btn-lg" (click)="onSelect('flashcards')">Flashcards</button>
+    <button *ngIf="words.length>=4" type="button" class="btn btn-secondary btn-lg" (click)="onSelect('quiz')">Quiz</button>
+    <button *ngIf="words.length>=20" type="button" class="btn btn-secondary btn-lg" (click)="onSelect('boardgame')">Play boardgame</button>
   </div>
 </div>
 <div class="row">
@@ -12,6 +13,7 @@
       <thead>
       <tr class="row">
         <th class="col-xs-2 text-center" scope="col">Remove</th>
+        <th class="col-xs-1 text-center" scope="col"></th>
         <th class="col-xs-2" scope="col">Hanzi</th>
         <th class="col-xs-2" scope="col">Pinyin</th>
         <th class="col-xs-6 text-center" scope="col">Tanslations</th>
@@ -20,6 +22,7 @@
       <tbody>
       <tr class="row" *ngFor="let word of words;let i=index">
         <td class="col-xs-2 text-center"><img src="/assets/remove.png" style="height:30px"  (click)="this.delete(i)"/></td>
+        <td class="col-xs-1 text-center"><img src="/assets/voice.png" style="height:30px"  (click)="pronounciation(word.hanzi)"/></td>
         <td class="col-xs-2 hanzi">{{word.hanzi}}</td>
         <td class="col-xs-2 ">{{word.pinyin}}</td>
         <td class="col-xs-6 text-center">{{word.translations}}</td>

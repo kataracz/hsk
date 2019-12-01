@@ -1,10 +1,25 @@
 .container{
   background-color: #f8f8f8;
   border-radius: 10px;
-  margin: 2% auto;
+  margin: 1% auto;
   box-shadow: #ebebeb 1px 1px 3px;
   padding:2%;
 }
+.index{
+  padding: 2% 0;
+  height: 30vh;
+  background: transparent;
+  text-shadow: #ebebeb 1px 1px 2px;
+  font-size: 120%;
+}
 p{
   font-size: 20px;
+}
+a{
+  color:black;
+}
+button{
+  color:black;
+  margin:0.5%;
+  font-size:15px;
 }

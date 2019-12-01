@@ -1,0 +1,7 @@
+<div class="container text-center">
+  <h2>Welcome back!</h2>
+  <h3>Your scores:</h3><br>
+  <p>Score: {{scores.score}}</p>
+  <p>Correct answers/all answers: <mat-progress-bar mode="determinate" value="{{progress}}" [color]="'#557669'"></mat-progress-bar></p>
+  <button type="button" class="btn btn-secondary btn-lg" (click)="onSelect('practice')">Practice</button>
+</div>

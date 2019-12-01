@@ -4,35 +4,52 @@
       <div class="col text-center hanzi" id="hanzi">
         {{this.question.hanzi}}
       </div>
-    </div>
-    <div style="height: 45px">
-      <img src="/assets/star.png" class="star" style="height:30px"  (click)="this.addWord(this.question)"/><p>Add to My Words</p>
+      <div class="row text-center">
+        <div class="col-sm-6 mobile-right">
+          <img src="/assets/star.png" class="star" style="height:30px"  (click)="this.addWord(this.question)"/><p>Add to My Words</p>
+        </div>
+        <div class="col-sm-6 mobile-left">
+          <img src="/assets/voice.png" style="height:50px"  (click)="pronounciation()"/>
+        </div>
+      </div>
     </div>
     <div style="font-size: 20px;height: 30px">
-      <p *ngIf="correctAnswer==1">{{this.question.translations[0]}}</p>
+      <p *ngIf="correctAnswer==1&&!pinyin">{{this.question.pinyin}}</p>
+      <p *ngIf="correctAnswer==1&&pinyin">{{this.question.translations[0]}}</p>
     </div>
     <div  style="font-size: 20px;height: 30px">
+      <p>Score:{{getScore()}}</p>
       <p *ngIf="feedback%5==0&&feedback!=0">Congrats, {{feedback}} correct answers in a row! Keep it up!</p>
       <p *ngIf="practiceMore%3==0&&practiceMore!=0">Don't worry, just practice a bit more.</p>
     </div>
     <div class="row">
       <div class="col-xs-6 text-center answer d-flex align-items-center" (click)="this.answers[0].pinyin==this.question.pinyin?correct():notCorrect()">
-        {{this.answers[0].pinyin}}
+        <div class="centered">
+          {{!pinyin?this.answers[0].translations:this.answers[0].pinyin}}
+        </div>
       </div>
       <div class="col-xs-6 text-center answer d-flex align-items-center" (click)="this.answers[1].pinyin==this.question.pinyin?correct():notCorrect()">
-        {{this.answers[1].pinyin}}
+        <div class="centered">
+          {{!pinyin?this.answers[1].translations:this.answers[1].pinyin}}
+        </div>
       </div>
     </div>
     <div class="row">
       <div class="col-xs-6 text-center answer d-flex align-items-center" (click)="this.answers[2].pinyin==this.question.pinyin?correct():notCorrect()">
-        {{this.answers[2].pinyin}}
+        <div class="centered">
+        {{!pinyin?this.answers[2].translations:this.answers[2].pinyin}}
+        </div>
       </div>
       <div class="col-xs-6 text-center answer d-flex align-items-center" (click)="this.answers[3].pinyin==this.question.pinyin?correct():notCorrect()">
-        {{this.answers[3].pinyin}}
+        <div class="centered">
+        {{!pinyin?this.answers[3].translations:this.answers[3].pinyin}}
+        </div>
       </div>
     </div>
   </div>
+  <button class="btn btn-secondary btn-lg" style="margin:1%" (click)="pinyin=true">I want to guess the pinyin</button><br>
   <img *ngIf="correctAnswer==1" class="correct" src="assets/correct.png"/>
+  <audio autoplay preload="auto" src="assets/correct.mp3" *ngIf="correctAnswer==1"></audio>
   <img *ngIf="correctAnswer==-1" class="wrong" src="assets/wrong.png"/>
 </div>
 

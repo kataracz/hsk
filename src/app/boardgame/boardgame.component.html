@@ -1,0 +1,17 @@
+<div class="container text-center">
+  <div class="row text-center">
+    <div  style="font-size: 20px;height: 30px">
+      <p>Score:{{getScore()}}</p>
+      <p *ngIf="feedback%5==0&&feedback!=0">Congrats, {{feedback}} correct answers in a row! Keep it up!</p>
+      <p *ngIf="practiceMore%3==0&&practiceMore!=0">Don't worry, just practice a bit more.</p>
+    </div>
+
+    <div class="text-center grid" style="margin: 5%">
+      <div class="tile" *ngFor="let word of tiles;let i=index" (click)="guess(word)" [ngStyle]="{'background-color':isguessedright(word)}">
+          {{word}}
+      </div>
+    </div>
+    <button class="btn btn-secondary btn-lg" style="margin:1%" (click)="generateBoard()">New game</button><br>
+  </div>
+</div>
+

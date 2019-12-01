@@ -1,15 +1,14 @@
 .container{
   margin: 0 auto;
-  padding:3%;
 }
 .next{
   font-size: 30px;
   margin:1%;
 }
 .answer{
-  padding: 50px 0;
-  //height: 150px;
-  font-size: 50px;
+  padding: 2% 0;
+  height: 150px;
+  font-size: 20px;
   border: #557669 1px solid;
   background-color: #f8f8f8;
   border-radius: 10px;
@@ -40,8 +39,28 @@
   font-size: 80px;
   margin:2%;
 }
+.centered{
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+.mobile-left{
+  text-align: left;
+}
+.mobile-right{
+  text-align: right;
+}
 @media only screen and (max-width: 768px) {
   .answer{
-    font-size: 25px;
+    font-size: 15px;
+  }
+  .mobile-left{
+    text-align: center !important;
+  }
+  .mobile-right{
+    text-align: center !important;
   }
 }

@@ -1,7 +1,29 @@
 .container{
   background-color: #f8f8f8;
   border-radius: 10px;
-  margin: 2% auto;
+  margin: 0 auto;
   box-shadow: #ebebeb 1px 1px 3px;
-  padding:2%;
+  padding:1%;
+}
+.voice{
+  height:30px;
+}
+.star{
+  height:30px;
+}
+
+@media only screen and (max-width: 768px) {
+  .translation{
+    font-size: 15px;
+  }
+  .container{
+    padding:0;
+    border-radius: 10px;
+  }
+  .hanzi{
+    font-size: 25px;
+  }
+  .voice{
+    height: 25px;
+  }
 }

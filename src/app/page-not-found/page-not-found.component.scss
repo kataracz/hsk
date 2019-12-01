@@ -1,0 +1,17 @@
+#pagenf{
+  margin: 0;
+  font-size: 50px;
+  font-style: normal;
+  top: 50%;
+  left: 50%;
+  position: absolute;
+  -ms-transform: translate(-50%,-50%);
+  transform: translate(-50%,-50%);
+  font-family: 'Bahianita', cursive;
+}
+#mainArea{
+  margin: 0;
+}
+.circle {
+  border-radius: 50%;
+}

@@ -1,7 +1,8 @@
 <div class="row">
   <div class="col-md-12 text-center">
-      <button type="button" class="btn btn-secondary btn-lg" (click)="flashcards();onSelect('flashcards')">Flashcards</button>
-      <button type="button" class="btn btn-secondary btn-lg" (click)="quiz();onSelect('quiz')">Quiz</button>
+      <button type="button" class="btn btn-secondary btn-lg" (click)="onSelect('flashcards')">Flashcards</button>
+      <button type="button" class="btn btn-secondary btn-lg" (click)="onSelect('quiz')">Quiz</button>
+      <button type="button" class="btn btn-secondary btn-lg" (click)="onSelect('boardgame')">Boardgame</button>
   </div>
 </div>
 <div class="row">
@@ -9,21 +10,28 @@
     <div class="container">
       <mat-paginator #paginator [length]="words.length" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" (page)="changePage($event)" style="background-color: #f8f8f8">
       </mat-paginator>
+      <!--<form class="example-form" style="margin-left: 5%">
+        <mat-form-field class="example-full-width">
+          <textarea matInput placeholder="Search"></textarea>
+        </mat-form-field>
+      </form>-->
     <table class="table" *ngIf="words" style="font-size: 20px">
       <thead>
       <tr class="row">
-        <th class="col-xs-2 text-center" scope="col">Add to<br>My Words</th>
+        <th class="col-xs-1 text-center" scope="col">Add to<br>My Words</th>
+        <th class="col-xs-1 text-center" scope="col"></th>
         <th class="col-xs-2" scope="col">Hanzi</th>
         <th class="col-xs-2" scope="col">Pinyin</th>
-        <th class="col-xs-6 text-center" scope="col">Tanslations</th>
+        <th class="col-md-6 text-center" scope="col">Tanslations</th>
       </tr>
       </thead>
       <tbody>
       <tr class="row" *ngFor="let word of displayedWords">
-        <td class="col-xs-2 text-center"><img src="/assets/star.png" class="star" style="height:30px"  (click)="this.addWord(word)"/></td>
+        <td class="col-xs-1 text-center"><img class="star" src="/assets/star.png" [ngStyle]="{'filter':isMyWord(word)}" (click)="this.addWord(word)"/></td>
+        <td class="col-xs-1 text-center"><img class="voice" src="/assets/voice.png" (click)="pronounciation(word.hanzi)"/></td>
         <td class="col-xs-2 hanzi">{{word.hanzi}}</td>
         <td class="col-xs-2 ">{{word.pinyin}}</td>
-        <td class="col-xs-6 text-center">{{word.translations}}</td>
+        <td class="col-md-6 text-center translation">{{word.translations}}</td>
       </tr>
       </tbody>
     </table>

@@ -1,0 +1,30 @@
+<h3>SIGN UP</h3>
+<form (ngSubmit)="submitted()" #form="ngForm" class="text-center">
+  <hr>
+  <div class="form-group text-center">
+    <div class="input-group text-center">
+      <label>
+        <input type="email" class="form-control center" name="email" required [ngModel]="defaultEmail">
+      </label>
+    </div>
+  </div>
+  <div class="form-group text-center">
+    <div class="input-group text-center">
+      <label>
+        <input type="password" class="form-control center" name="password" required [ngModel]="defaultPassword">
+        <span></span>
+      </label>
+    </div>
+  </div>
+  <div class="form-group text-center">
+    <div class="input-group text-center">
+      <label>
+        <input type="password" class="form-control center" name="confirmPassword" required [ngModel]="defConfirmPassword">
+      </label>
+    </div>
+  </div>
+  <div *ngIf="pwderror"><p style="color: darkred;">Passwords must match.</p></div>
+  <div class="form-group">
+    <button type="submit" class="btn btn-secondary" [disabled]="!form.valid">Sign Up</button>
+  </div>
+</form>

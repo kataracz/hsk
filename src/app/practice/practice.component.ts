@@ -1,20 +1,20 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {HttpErrorResponse} from "@angular/common/http";
-import Speech from 'speak-tts'
+import {CookieService} from "ngx-cookie-service";
+import Speech from 'speak-tts';
 import {ScoresService} from "../scores.service";
 
 @Component({
-  selector: 'app-mywords',
-  templateUrl: './mywords.component.html',
-  styleUrls: ['./mywords.component.scss']
+  selector: 'app-practice',
+  templateUrl: './practice.component.html',
+  styleUrls: ['./practice.component.scss']
 })
-export class MywordsComponent implements OnInit {
-  public words=[];
+export class PracticeComponent implements OnInit {
   @Output() chosenFunction= new EventEmitter<string>();
+  words=[];
+  speech = new Speech();
   constructor(private user:ScoresService) {
-    this.words=user.scores.mywords;
+    this.words=user.scores.wordsToPractice;
   }
-
   onSelect(section:string){
     this.chosenFunction.emit(section);
     this.user.source=this.words;
@@ -23,24 +23,14 @@ export class MywordsComponent implements OnInit {
     this.words.splice(needToDelete,1);
   }
   pronounciation(word){
-    const speech = new Speech();
-
     let i=0;
     speechSynthesis.getVoices().forEach(voice => {
       i++;
       if(i==17){
-        speech.setVoice(voice.name);
+        this.speech.setVoice(voice.name);
       }
     });
-
-    speech.init({'lang': 'zh-CN'}).then((data) => {
-      // The "data" object contains the list of available voices and the voice synthesis params
-      console.log("Speech is ready, voices are available", data)
-    }).catch(e => {
-      console.error("An error occured while initializing : ", e)
-    });
-
-    speech.speak({
+    this.speech.speak({
       text: word,
     }).then(() => {
       console.log("Success !")
@@ -50,6 +40,12 @@ export class MywordsComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.speech.init({'lang': 'zh-CN'}).then((data) => {
+      // The "data" object contains the list of available voices and the voice synthesis params
+      console.log("Speech is ready, voices are available", data)
+    }).catch(e => {
+      console.error("An error occured while initializing : ", e)
+    });
   }
 
 }
