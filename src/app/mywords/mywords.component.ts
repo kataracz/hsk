@@ -10,6 +10,7 @@ import {ScoresService} from "../scores.service";
 })
 export class MywordsComponent implements OnInit {
   public words=[];
+  speech = new Speech();
   @Output() chosenFunction= new EventEmitter<string>();
   constructor(private user:ScoresService) {
     this.words=user.scores.mywords;
@@ -23,24 +24,14 @@ export class MywordsComponent implements OnInit {
     this.words.splice(needToDelete,1);
   }
   pronounciation(word){
-    const speech = new Speech();
-
     let i=0;
     speechSynthesis.getVoices().forEach(voice => {
-      i++;
-      if(i==17){
-        speech.setVoice(voice.name);
+      if(voice.lang=="zh-CN"){
+        this.speech.setVoice(voice.name);
       }
     });
 
-    speech.init({'lang': 'zh-CN'}).then((data) => {
-      // The "data" object contains the list of available voices and the voice synthesis params
-      console.log("Speech is ready, voices are available", data)
-    }).catch(e => {
-      console.error("An error occured while initializing : ", e)
-    });
-
-    speech.speak({
+    this.speech.speak({
       text: word,
     }).then(() => {
       console.log("Success !")
@@ -50,6 +41,12 @@ export class MywordsComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.speech.init({'lang': 'zh-CN', 'voiceURI': 'Google 普通话（中国大陆）'}).then((data) => {
+      // The "data" object contains the list of available voices and the voice synthesis params
+      console.log("Speech is ready, voices are available", data)
+    }).catch(e => {
+      console.error("An error occured while initializing : ", e)
+    });
   }
 
 }

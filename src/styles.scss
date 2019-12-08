@@ -11,7 +11,7 @@ html {
 }
 body {
   padding-top: 70px;
-  background-image: linear-gradient(to bottom right, rgba(242, 209, 168, 0.6), rgba(235, 235, 235, 0.4)),url("assets/background2.jpg");
+  background-image: linear-gradient(to bottom right, rgba(242, 209, 168, 0.6), rgba(235, 235, 235, 0.4)),url("assets/bg.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   background-attachment: fixed;
@@ -27,24 +27,30 @@ body {
 .star:hover{
   filter:none;
 }
-.btn.btn-secondary.btn-lg{
-  margin: 5%;
-  font-size: 30px;
-}
+
 .btn.btn-secondary{
-  background:$secondary-darker;
   border-color:$secondary-darker;
-  color: #ebebeb;
-  box-shadow:white 1px 1px 2px;
+  color: $secondary-darker;
+  margin:2%;
+  font-size: 140%;
+  box-shadow: #ebddff 1px 1px 3px;
+  transform: none;
+  animation-name: buttonColor;
+  animation-duration: 8s;
+  animation-iteration-count: infinite;
+  border-radius:20px;
+  background: rgba(193, 193, 193, 0.2);
+  padding: 10px;
 }
 .btn.btn-secondary:hover{
-  background: linear-gradient($neutral,$secondary-darker);
-  border-color:$secondary-darker;
+  background: radial-gradient(circle, rgba(248, 248, 248, 0.6) 0%, rgba(193, 193, 193, 0.2) 70%);
+  color: $secondary-darker;
 }
 .table {
-  width: 75% !important;
+  width: 80% !important;
   margin: 0 auto !important;
   float: none;
+  overflow: scroll;
 }
 .center{
   position:absolute;

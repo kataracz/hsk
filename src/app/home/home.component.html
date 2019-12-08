@@ -1,4 +1,4 @@
-<div class="index text-center">
+<div *ngIf="!IsUserLoggedin()" class="index text-center">
     <h1 >HSK practice</h1><br>
 </div>
 <app-scores (chosenSection)="emit($event)" *ngIf="IsUserLoggedin()"></app-scores>

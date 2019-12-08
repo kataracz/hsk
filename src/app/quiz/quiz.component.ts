@@ -49,7 +49,7 @@ export class QuizComponent implements OnInit, OnDestroy {
     let i=0;
     speechSynthesis.getVoices().forEach(voice => {
       i++;
-      if(i==17){
+      if(voice.lang=="zh-CN"){
         this.speech.setVoice(voice.name);
       }
     });

@@ -1,9 +1,10 @@
-import {Component, EventEmitter, HostBinding, Inject, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, HostBinding, Inject, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import { HttpErrorResponse } from '@angular/common/http';
 import {PageEvent} from "@angular/material/paginator";
 import Speech from 'speak-tts'
 import {Scores, ScoresService} from "../scores.service";
+import {NgForm} from "@angular/forms";
 
 @Component({
   selector: 'app-hsk',
@@ -14,9 +15,11 @@ export class HskComponent implements OnInit, OnDestroy {
   words = [];
   @Input() public src:string;
   @Output() chosenFunction= new EventEmitter<string>();
+  @ViewChild('form',{static:true}) form: NgForm;
   scoreToSave:Scores;
   touched=false;
   speech = new Speech();
+  searched="";
 
   pageIndex=0;
   pageSize=10;
@@ -67,6 +70,17 @@ export class HskComponent implements OnInit, OnDestroy {
   onSelect(section: string){
     this.chosenFunction.emit(section);
     this.user.source=this.words;
+  }
+
+  search(){
+    this.words.forEach((value)=>{
+      if(value.hanzi==this.form.value.search||value.translations.includes(this.form.value.search)){
+        this.searched=value;
+      }
+    });
+    if(this.form.value.search){
+
+    }
   }
 
   constructor (private httpService: HttpClient,private user:ScoresService) {
