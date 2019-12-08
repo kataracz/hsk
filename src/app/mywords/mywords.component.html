@@ -9,6 +9,24 @@
   <div class="col-md-12">
     <div *ngIf="words.length<1" class="container text-center"><p style="font-size: 20px" >There are no saved words.</p></div>
     <div class="container" *ngIf="words.length>=1">
+      <!--<form (ngSubmit)="search()" #form="ngForm">
+        <div class="form-group text-center">
+          <div class="input-group text-center">
+            <input type="search" class="form-control center" name="search" style="display: inline" required [ngModel]="'search word'">
+            <button type="submit" class="btn btn-secondary btn-lg" style="display: inline;font-size: 15px;">Search</button>
+          </div>
+        </div>
+      </form>-->
+      <div *ngIf="searched">
+        <table class="table">
+          <tr class="row" class="searched">
+            <td class="col-xs-1 text-center"><img class="voice" src="/assets/voice.png" (click)="pronounciation(searched.hanzi)"/></td>
+            <td class="col-xs-2 hanzi">{{searched.hanzi}}</td>
+            <td class="col-xs-2 ">{{searched.pinyin}}</td>
+            <td class="col-md-6 text-center translation">{{searched.translations}}</td>
+          </tr>
+        </table>
+      </div>
     <table class="table"  style="font-size: 20px">
       <thead>
       <tr class="row">

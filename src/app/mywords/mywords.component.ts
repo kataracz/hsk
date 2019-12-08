@@ -1,7 +1,8 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {HttpErrorResponse} from "@angular/common/http";
 import Speech from 'speak-tts'
 import {ScoresService} from "../scores.service";
+import {NgForm} from "@angular/forms";
 
 @Component({
   selector: 'app-mywords',
@@ -11,9 +12,11 @@ import {ScoresService} from "../scores.service";
 export class MywordsComponent implements OnInit {
   public words=[];
   speech = new Speech();
+  @ViewChild('form',{static:true}) form: NgForm;
+  searched="";
   @Output() chosenFunction= new EventEmitter<string>();
   constructor(private user:ScoresService) {
-    this.words=user.scores.mywords;
+
   }
 
   onSelect(section:string){
@@ -22,6 +25,13 @@ export class MywordsComponent implements OnInit {
   }
   delete(needToDelete){
     this.words.splice(needToDelete,1);
+  }
+  search(){
+    this.words.forEach((value)=>{
+      if(value.hanzi==this.form.value.search||value.translations.includes(this.form.value.search)){
+        this.searched=value;
+      }
+    });
   }
   pronounciation(word){
     let i=0;
@@ -47,6 +57,7 @@ export class MywordsComponent implements OnInit {
     }).catch(e => {
       console.error("An error occured while initializing : ", e)
     });
+    this.words=this.user.scores.mywords;
   }
 
 }

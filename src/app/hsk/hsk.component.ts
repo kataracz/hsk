@@ -78,15 +78,15 @@ export class HskComponent implements OnInit, OnDestroy {
         this.searched=value;
       }
     });
-    if(this.form.value.search){
-
-    }
   }
 
   constructor (private httpService: HttpClient,private user:ScoresService) {
 
   }
   ngOnInit () {
+    //get data from the JSON files
+    //the JSON files containing the words for each HSK level can be found at https://github.com/gigacool/hanyu-shuiping-kaoshi/
+    //these files are created by a github user named gigacool
     this.httpService.get(this.src).subscribe(
       data => {
         this.words = data as string [];
