@@ -4,4 +4,14 @@
   margin: 2% auto;
   box-shadow: #ebebeb 1px 1px 3px;
   padding:2%;
+  &__empty-message {
+    font-size: 20px;
+  }
+}
+.material-icons {
+  height: 30px;
+  font-size: 30px;
+}
+.hanzi {
+  font-size: 30px;
 }

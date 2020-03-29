@@ -1,52 +1,41 @@
 <div class="row">
   <div class="col-md-12 text-center">
-    <button *ngIf="words.length>=1" type="button" class="btn btn-secondary btn-lg" (click)="onSelect('flashcards')">Flashcards</button>
-    <button *ngIf="words.length>=4" type="button" class="btn btn-secondary btn-lg" (click)="onSelect('quiz')">Quiz</button>
-    <button *ngIf="words.length>=20" type="button" class="btn btn-secondary btn-lg" (click)="onSelect('boardgame')">Play boardgame</button>
+    <button *ngIf="words.length>=1" [routerLink]="'flashcards'" type="button" class="btn btn-primary btn-lg --plain">{{'Flashcards' | uppercase}}</button>
+    <button *ngIf="words.length>=4" [routerLink]="'quiz'" type="button" class="btn btn-primary btn-lg --plain">{{'Quiz' | uppercase}}</button>
+    <button *ngIf="words.length>=20" [routerLink]="'boardgame'" type="button" class="btn btn-primary btn-lg --plain">{{'Boardgame' | uppercase}}</button>
   </div>
 </div>
 <div class="row">
   <div class="col-md-12">
-    <div *ngIf="words.length<1" class="container text-center"><p style="font-size: 20px" >There are no saved words.</p></div>
+    <div *ngIf="words.length<1" class="container text-center">
+      <p class="container__empty-message">There are no saved words.</p>
+    </div>
     <div class="container" *ngIf="words.length>=1">
-      <!--<form (ngSubmit)="search()" #form="ngForm">
-        <div class="form-group text-center">
-          <div class="input-group text-center">
-            <input type="search" class="form-control center" name="search" style="display: inline" required [ngModel]="'search word'">
-            <button type="submit" class="btn btn-secondary btn-lg" style="display: inline;font-size: 15px;">Search</button>
+      <div *ngIf="searched.hanzi">
+          <div class="row searched word-container">
+            <div class="col col-md-6">
+              <div class="row">
+                <div class="col-xs-4 text-center"><i class="material-icons material-icons--dark" (click)="pronounciation(searched.hanzi)">volume_up</i></div>
+                <div class="col-xs-4 hanzi">{{searched.hanzi}}</div>
+                <div class="col-xs-4 ">{{searched.pinyin}}</div>
+              </div>
+            </div>
+            <div class="col-md-6 text-center translation">{{searched.translations}}</div>
           </div>
-        </div>
-      </form>-->
-      <div *ngIf="searched">
-        <table class="table">
-          <tr class="row" class="searched">
-            <td class="col-xs-1 text-center"><img class="voice" src="/assets/voice.png" (click)="pronounciation(searched.hanzi)"/></td>
-            <td class="col-xs-2 hanzi">{{searched.hanzi}}</td>
-            <td class="col-xs-2 ">{{searched.pinyin}}</td>
-            <td class="col-md-6 text-center translation">{{searched.translations}}</td>
-          </tr>
-        </table>
       </div>
-    <table class="table"  style="font-size: 20px">
-      <thead>
-      <tr class="row">
-        <th class="col-xs-2 text-center" scope="col">Remove</th>
-        <th class="col-xs-1 text-center" scope="col"></th>
-        <th class="col-xs-2" scope="col">Hanzi</th>
-        <th class="col-xs-2" scope="col">Pinyin</th>
-        <th class="col-xs-6 text-center" scope="col">Tanslations</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr class="row" *ngFor="let word of words;let i=index">
-        <td class="col-xs-2 text-center"><img src="/assets/remove.png" style="height:30px"  (click)="this.delete(i)"/></td>
-        <td class="col-xs-1 text-center"><img src="/assets/voice.png" style="height:30px"  (click)="pronounciation(word.hanzi)"/></td>
-        <td class="col-xs-2 hanzi">{{word.hanzi}}</td>
-        <td class="col-xs-2 ">{{word.pinyin}}</td>
-        <td class="col-xs-6 text-center">{{word.translations}}</td>
-      </tr>
-      </tbody>
-    </table>
+      <div class="table">
+        <div class="row table__word-container" *ngFor="let word of words;let i=index">
+          <div class="col-md-6 col">
+            <div class="row">
+              <div class="col col-xs-3 text-center"><i class="material-icons material-icons--dark" (click)="this.delete(i)">delete</i></div>
+              <div class="col col-xs-3 text-center"><i class="material-icons material-icons--dark" (click)="pronounciation(word.hanzi)">volume_up</i></div>
+              <div class="col col-xs-3 hanzi">{{word.hanzi}}</div>
+              <div class="col col-xs-3 ">{{word.pinyin}}</div>
+            </div>
+          </div>
+          <div class="col col-md-6 text-center translation">{{word.translations}}</div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

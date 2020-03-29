@@ -1,22 +1,28 @@
-<h3>LOG IN</h3>
+<div class="login-container title">
+  <p>{{'Want to see your scores?' | uppercase}}</p>
+</div>
 
-<form (ngSubmit)="submitted()" #form="ngForm" class="text-center">
-  <hr>
-  <div class="form-group text-center">
-    <div class="input-group text-center">
-      <label>
-        <input type="email" class="form-control center" name="email" required [ngModel]="defaultEmail">
-      </label>
+<div class="login-container">
+  <h3>LOG IN</h3>
+
+  <form (ngSubmit)="submitted()" #form="ngForm" class="text-center">
+    <hr>
+    <div class="form-group text-center">
+      <div class="input-group text-center">
+        <label>
+          <input placeholder="email"  type="email" class="form-control center-input" name="email" required [ngModel]="defaultEmail">
+        </label>
+      </div>
     </div>
-  </div>
-  <div class="form-group text-center">
-    <div class="input-group text-center">
-      <label>
-        <input type="password" class="form-control center" name="password" required [ngModel]="defaultPassword">
-      </label>
+    <div class="form-group text-center">
+      <div class="input-group text-center">
+        <label>
+          <input placeholder="password" type="password" class="form-control center-input" name="password" required [ngModel]="defaultPassword">
+        </label>
+      </div>
     </div>
-  </div>
-  <div class="form-group">
-    <button type="submit" class="btn btn-secondary" [disabled]="!form.valid">Login</button>
-  </div>
-</form>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary" [disabled]="!form.valid">Login</button>
+    </div>
+  </form>
+</div>

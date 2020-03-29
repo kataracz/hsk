@@ -1,7 +1,6 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {CookieService} from "ngx-cookie-service";
-import Speech from 'speak-tts';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {ScoresService} from "../scores.service";
+import {PronounciationService} from "../pronounciation.service";
 
 @Component({
   selector: 'app-practice',
@@ -9,43 +8,22 @@ import {ScoresService} from "../scores.service";
   styleUrls: ['./practice.component.scss']
 })
 export class PracticeComponent implements OnInit {
-  @Output() chosenFunction= new EventEmitter<string>();
+
   words=[];
-  speech = new Speech();
-  constructor(private user:ScoresService) {
-    this.words=user.scores.wordsToPractice;
-  }
-  onSelect(section:string){
-    this.chosenFunction.emit(section);
-    this.user.source=this.words;
-  }
+
   delete(needToDelete){
     this.words.splice(needToDelete,1);
   }
   pronounciation(word){
-    let i=0;
-    speechSynthesis.getVoices().forEach(voice => {
-      i++;
-      if(i==17){
-        this.speech.setVoice(voice.name);
-      }
-    });
-    this.speech.speak({
-      text: word,
-    }).then(() => {
-      console.log("Success !")
-    }).catch(e => {
-      console.error("An error occurred :", e)
-    })
+    this.speech.pronounciation(word);
   }
 
+  constructor(private user:ScoresService, private speech: PronounciationService) {
+    this.words=user.scores.wordsToPractice;
+  }
   ngOnInit() {
-    this.speech.init({'lang': 'zh-CN'}).then((data) => {
-      // The "data" object contains the list of available voices and the voice synthesis params
-      console.log("Speech is ready, voices are available", data)
-    }).catch(e => {
-      console.error("An error occured while initializing : ", e)
-    });
+    this.words=this.user.scores.wordsToPractice;
+    this.user.source = this.user.scores.wordsToPractice;
   }
 
 }

@@ -1,54 +1,56 @@
 <div class="row">
   <div class="col-md-12 text-center">
-      <button type="button" class="btn btn-secondary btn-lg" (click)="onSelect('flashcards')">Flashcards</button>
-      <button type="button" class="btn btn-secondary btn-lg" (click)="onSelect('quiz')">Quiz</button>
-      <button type="button" class="btn btn-secondary btn-lg" (click)="onSelect('boardgame')">Boardgame</button>
+      <button [routerLink]="'flashcards'" type="button" class="btn btn-primary btn-lg --plain">{{'Flashcards' | uppercase}}</button>
+      <button [routerLink]="'quiz'" type="button" class="btn btn-primary btn-lg --plain">{{'Quiz' | uppercase}}</button>
+      <button [routerLink]="'boardgame'" type="button" class="btn btn-primary btn-lg --plain">{{'Boardgame' | uppercase}}</button>
   </div>
 </div>
+
 <div class="row">
   <div class="col-md-12">
     <div class="container">
-      <mat-paginator #paginator [length]="words.length" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" (page)="changePage($event)" style="background-color: #f8f8f8">
-      </mat-paginator>
-      <form (ngSubmit)="search()" #form="ngForm">
-      <div class="form-group text-center">
-        <div class="input-group text-center">
-            <input type="search" class="form-control center" name="search" style="display: inline" required [ngModel]="'search word'">
-            <button type="submit" class="btn btn-secondary btn-lg" style="display: inline;font-size: 15px;">Search</button>
+      <div class="container__actions">
+        <mat-paginator #paginator [length]="words.length" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" (page)="changePage($event)" style="background-color: #f8f8f8">
+        </mat-paginator>
+        <form (ngSubmit)="search()" #form="ngForm">
+          <div class="form-group">
+            <div class="input-group">
+              <input type="search" class="form-control input-group__search-input" name="search" required placeholder="search" [ngModel]="searchedWord">
+              <button type="submit" class="btn btn-primary btn-lg input-group__search-button">Search</button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div *ngIf="searched.hanzi">
+          <div class="row searched word-container">
+            <div class="col col-md-6">
+              <div class="row">
+                <div class="col col-xs-2 text-center"><i class="material-icons material-icons--dark" (click)="this.addWord(searched)">favorite</i></div>
+                <div class="col col-xs-2 text-center"><i class="material-icons material-icons--dark" (click)="pronounciation(searched.hanzi)">volume_up</i></div>
+                <div class="col col-xs-4 hanzi">{{searched.hanzi}}</div>
+                <div class="col col-xs-4 ">{{searched.pinyin}}</div>
+              </div>
+            </div>
+            <div class="col col-md-6 text-center translation">{{searched.translations}}</div>
+          </div>
+      </div>
+    <div class="table" *ngIf="words">
+      <div class="row table__word-container" *ngFor="let word of displayedWords">
+        <div class="col col-md-6">
+          <div class="row">
+            <div class="col col-xs-2 text-center">
+              <i *ngIf="!isMyWord(word)" class="material-icons material-icons--dark" (click)="this.addWord(word)">favorite_border</i>
+              <i *ngIf="isMyWord(word)" class="material-icons material-icons--dark" (click)="this.addWord(word)">favorite</i>
+            </div>
+            <div class="col col-xs-2 text-center"><i class="material-icons material-icons--dark" (click)="pronounciation(word.hanzi)">volume_up</i></div>
+            <div class="col col-xs-4 hanzi">{{word.hanzi}}</div>
+            <div class="col col-xs-4">{{word.pinyin}}</div>
+          </div>
         </div>
+        <div class="col-md-6 text-center translation">{{word.translations}}</div>
       </div>
-      </form>
-      <div *ngIf="searched">
-        <table class="table">
-          <tr class="row" class="searched">
-            <td class="col-xs-1 text-center"><img class="star" src="/assets/star.png" [ngStyle]="{'filter':isMyWord(searched)}" (click)="this.addWord(searched)"/></td>
-            <td class="col-xs-1 text-center"><img class="voice" src="/assets/voice.png" (click)="pronounciation(searched.hanzi)"/></td>
-            <td class="col-xs-2 hanzi">{{searched.hanzi}}</td>
-            <td class="col-xs-2 ">{{searched.pinyin}}</td>
-            <td class="col-md-6 text-center translation">{{searched.translations}}</td>
-          </tr>
-        </table>
-      </div>
-    <table class="table" *ngIf="words" style="font-size: 15px">
-      <thead>
-      <tr class="row">
-        <th class="col-xs-1 text-center" scope="col">Add to<br>My Words</th>
-        <th class="col-xs-1 text-center" scope="col"></th>
-        <th class="col-xs-2" scope="col">Hanzi</th>
-        <th class="col-xs-2" scope="col">Pinyin</th>
-        <th class="col-md-6 text-center" scope="col">Tanslations</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr class="row" *ngFor="let word of displayedWords">
-        <td class="col-xs-1 text-center"><img class="star" src="/assets/star.png" [ngStyle]="{'filter':isMyWord(word)}" (click)="this.addWord(word)"/></td>
-        <td class="col-xs-1 text-center"><img class="voice" src="/assets/voice.png" (click)="pronounciation(word.hanzi)"/></td>
-        <td class="col-xs-2 hanzi">{{word.hanzi}}</td>
-        <td class="col-xs-2 ">{{word.pinyin}}</td>
-        <td class="col-md-6 text-center translation">{{word.translations}}</td>
-      </tr>
-      </tbody>
-    </table>
+    </div>
     </div>
   </div>
 </div>

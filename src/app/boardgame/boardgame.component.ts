@@ -1,6 +1,8 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import { ViewContainerRef } from '@angular/core';
 import {Scores, ScoresService} from "../scores.service";
+import {HttpClient, HttpErrorResponse} from "@angular/common/http";
+import {ActivatedRoute, Router} from "@angular/router";
+import {PronounciationService} from "../pronounciation.service";
 
 @Component({
   selector: 'app-boardgame',
@@ -19,8 +21,12 @@ export class BoardgameComponent implements OnInit , OnDestroy{
   guessedright=[];
   scoreToSave:Scores;
   touched=false;
-  constructor(private scores:ScoresService) {
-    this.words=scores.source;
+  flashcardLink: string;
+  quizLink: string;
+  boardgameLink: string;
+
+  pronounciation(word) {
+    this.speech.pronounciation(word);
   }
 
   guess(word) {
@@ -34,6 +40,7 @@ export class BoardgameComponent implements OnInit , OnDestroy{
       for(let i=0;i<10; i++){
         if(this.chosen1==this.chosenwords[i].hanzi){
           if(this.chosenwords[i].pinyin==this.chosen2){
+            this.pronounciation(this.chosenwords[i].hanzi);
             this.correct();
             this.guessedright.push(this.chosen1,this.chosen2);
             break;
@@ -43,7 +50,9 @@ export class BoardgameComponent implements OnInit , OnDestroy{
           }
         }else if(this.chosen2==this.chosenwords[i].hanzi){
           if(this.chosenwords[i].pinyin==this.chosen1){
+            this.pronounciation(this.chosenwords[i].hanzi);
             this.correct();
+
             this.guessedright.push(this.chosen1,this.chosen2);
             break;
           }else{
@@ -116,13 +125,68 @@ export class BoardgameComponent implements OnInit , OnDestroy{
     this.tiles=[];
     this.choose();
   }
-
-  ngOnInit() {
-    this.choose();
-  }
   getScore(){
     return this.scores.scores.score;
   }
+
+  constructor(public scores:ScoresService, private httpService: HttpClient, private route: ActivatedRoute,
+              private router: Router, private speech: PronounciationService) {
+    this.words=scores.source;
+  }
+
+  ngOnInit() {
+    this.route.paramMap.subscribe(params => {
+      var param = params.get('level');
+      if(!param){
+        this.words = this.scores.source;
+        this.choose();
+        if(this.scores.source == this.scores.scores.wordsToPractice){
+          this.flashcardLink = '/practice/flashcards';
+          this.quizLink = '/practice/quiz';
+          this.boardgameLink = '/practice/boardgame';
+        }
+        else if (this.scores.source == this.scores.scores.mywords){
+          this.flashcardLink = '/mywords/flashcards';
+          this.quizLink = '/mywords/quiz';
+          this.boardgameLink = '/mywords/boardgame';
+        }
+      } else {
+        var hskLevel = '/hsk/' + params.get('level');
+        this.flashcardLink = hskLevel + '/flashcards';
+        this.quizLink = hskLevel + '/quiz';
+        this.boardgameLink = hskLevel + '/boardgame';
+        if (this.scores.source) {
+          this.words=this.scores.source;
+          this.choose();
+        }
+        else {
+          this.route.paramMap.subscribe(params => {
+            var hskLevel = '/hsk/' + params.get('level');
+            this.flashcardLink = hskLevel + '/flashcards';
+            this.quizLink = hskLevel + '/quiz';
+            this.boardgameLink = hskLevel + '/boardgame';
+            var src = 'assets/hsk-level-' + params.get('level') + '.json';
+
+            //get data from the JSON files
+            //the JSON files containing the words for each HSK level can be found at https://github.com/gigacool/hanyu-shuiping-kaoshi/
+            //these files are created by a github user named gigacool
+            this.httpService.get(src).subscribe(
+              data => {
+                this.words = data as string [];
+                this.scores.source=this.words;
+                this.choose();
+
+              },
+              (err: HttpErrorResponse) => {
+                console.log (err.message);
+              }
+            );
+          });
+        }
+      }
+    });
+  }
+
   ngOnDestroy(): void {
     if(this.scores.loggedin==1&&this.touched){
       this.scoreToSave={
@@ -131,9 +195,13 @@ export class BoardgameComponent implements OnInit , OnDestroy{
         correctAnswers: this.scores.scores.correctAnswers,
         allAnswers: this.scores.scores.allAnswers,
         wordsToPractice: this.scores.scores.wordsToPractice,
-        mywords: this.scores.scores.mywords
-      };
-      this.scores.newScore(this.scoreToSave).then(r => console.log((this.scoreToSave)));
+        mywords: this.scores.scores.mywords,
+        bestTimerQuizScore: this.scores.scores.bestTimerQuizScore,
+        whichDay: this.scores.scores.whichDay,
+        lastLogin: this.scores.scores.lastLogin
+        };
+      this.scores.newScore(this.scoreToSave).then(r => console.log(('score saved')));
     }
-    }
+
+  }
 }

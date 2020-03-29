@@ -27,16 +27,26 @@ import { PracticeComponent } from './practice/practice.component';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { environment } from '../environments/environment';
-import {AngularFirestore, AngularFirestoreModule} from "@angular/fire/firestore";
+import { AngularFirestoreModule} from "@angular/fire/firestore";
 import { ScoresComponent } from './home/scores/scores.component';
 
 export const firebaseConfig = environment.firebaseConfig;
 const routes: Routes=[
   {path:'',component:HomeComponent},
-  {path:'flashcards:level',component:FlashcardsComponent},
-  {path:'quiz:level',component:QuizComponent},
+  {path:'dashboard',component:ScoresComponent},
+  {path:'practice',component:PracticeComponent},
+  {path:'practice/flashcards',component:FlashcardsComponent},
+  {path:'practice/quiz',component:QuizComponent},
+  {path:'practice/boardgame',component:BoardgameComponent},
+  {path:'hsk/:level',component:HskComponent},
+  {path:'hsk/:level/flashcards',component:FlashcardsComponent},
+  {path:'hsk/:level/quiz',component:QuizComponent},
+  {path:'hsk/:level/boardgame',component:BoardgameComponent},
   {path:'mywords',component:MywordsComponent},
-  {path:'hsk:level',component:HskComponent}
+  {path:'mywords/flashcards',component:FlashcardsComponent},
+  {path:'mywords/quiz',component:QuizComponent},
+  {path:'mywords/boardgame',component:BoardgameComponent},
+  {path: '**', component:PageNotFoundComponent}
 ];
 
 @NgModule({
@@ -62,16 +72,17 @@ const routes: Routes=[
     MatButtonModule,
     MatCheckboxModule,
     MatPaginatorModule,
-    RouterModule.forRoot(routes),
+    RouterModule.forRoot(routes, {onSameUrlNavigation: 'reload'}),
     MatProgressBarModule,
     MatFormFieldModule,
     MatInputModule,
     FormsModule,
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFirestoreModule,
-    AngularFireDatabaseModule
+    AngularFireDatabaseModule,
   ],
   providers: [PageEvent],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  exports: [RouterModule],
 })
 export class AppModule { }

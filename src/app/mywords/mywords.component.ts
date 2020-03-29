@@ -1,8 +1,7 @@
-import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import {HttpErrorResponse} from "@angular/common/http";
-import Speech from 'speak-tts'
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {ScoresService} from "../scores.service";
 import {NgForm} from "@angular/forms";
+import {PronounciationService} from "../pronounciation.service";
 
 @Component({
   selector: 'app-mywords',
@@ -11,18 +10,13 @@ import {NgForm} from "@angular/forms";
 })
 export class MywordsComponent implements OnInit {
   public words=[];
-  speech = new Speech();
   @ViewChild('form',{static:true}) form: NgForm;
-  searched="";
-  @Output() chosenFunction= new EventEmitter<string>();
-  constructor(private user:ScoresService) {
+  searched={
+    "pinyin":"",
+    "hanzi":"",
+    "translations":""
+  };
 
-  }
-
-  onSelect(section:string){
-    this.chosenFunction.emit(section);
-    this.user.source=this.words;
-  }
   delete(needToDelete){
     this.words.splice(needToDelete,1);
   }
@@ -33,31 +27,14 @@ export class MywordsComponent implements OnInit {
       }
     });
   }
-  pronounciation(word){
-    let i=0;
-    speechSynthesis.getVoices().forEach(voice => {
-      if(voice.lang=="zh-CN"){
-        this.speech.setVoice(voice.name);
-      }
-    });
-
-    this.speech.speak({
-      text: word,
-    }).then(() => {
-      console.log("Success !")
-    }).catch(e => {
-      console.error("An error occurred :", e)
-    })
+  pronounciation(word) {
+    this.speech.pronounciation(word);
   }
+
+  constructor(private user:ScoresService, private speech: PronounciationService) {}
 
   ngOnInit() {
-    this.speech.init({'lang': 'zh-CN', 'voiceURI': 'Google 普通话（中国大陆）'}).then((data) => {
-      // The "data" object contains the list of available voices and the voice synthesis params
-      console.log("Speech is ready, voices are available", data)
-    }).catch(e => {
-      console.error("An error occured while initializing : ", e)
-    });
     this.words=this.user.scores.mywords;
+    this.user.source = this.user.scores.mywords;
   }
-
 }

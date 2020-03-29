@@ -18,7 +18,7 @@ export class PageNotFoundComponent implements OnInit {
       const cols = Math.floor($(window).width() / 12);
       var colwidth = mainArea.width() / cols;
       var counter = 404;
-      const colors = ['#d5ab9c', '#e6e696', '#7bc0a3', '#54878f'];
+      const colors = ['#f2d1a8', '#afa8f2', '#f2a8eb', '#ebf2a8'];
       if ($(window).width() <= 600) {
         var sizes = [45, 30, 60, 70, 80];
       } else {
@@ -37,12 +37,13 @@ export class PageNotFoundComponent implements OnInit {
         var bubble = $('<div></div>');
         bubble.addClass('circle');
         bubble.css({
-          position: 'absolute',
-          backgroundColor: colors[randColor],
-          width: sizes[randSize] + 'px',
-          height: sizes[randSize] + 'px',
-          left: randPos * colwidth - colwidth,
-          top: mainArea.height()
+          'border-radius': '50%',
+          'position': 'absolute',
+          'backgroundColor': colors[randColor],
+          'width': sizes[randSize] + 'px',
+          'height': sizes[randSize] + 'px',
+          'left': randPos * colwidth - colwidth,
+          'top': mainArea.height()
         });
         bubbles.push(bubble);
         bubble.appendTo("#mainArea");
@@ -59,7 +60,10 @@ export class PageNotFoundComponent implements OnInit {
         setInterval(drawCircles, 500);
       }
 
-      $('#pagenf').text(counter + ' page not found');
+      $('#pagenf').text(counter + ' PAGE NOT FOUND');
+      $('#pagenf').css({
+        color: 'white'
+      });
 
       $(document).on("click", ".circle", function () {
         if ($(this).width() === sizes[0] || $(this).width() === sizes[1]) {
@@ -68,7 +72,7 @@ export class PageNotFoundComponent implements OnInit {
           counter--;
         }
         $(this).stop().remove();
-        $('#pagenf').text(counter + ' page not found');
+        $('#pagenf').text(counter + ' PAGE NOT FOUND');
         if (counter <= 0) {
           $('#pagenf').text('Congrats, you won! But the page is still not found.');
           $('#pagenf').click(function () {

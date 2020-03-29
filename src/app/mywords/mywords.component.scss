@@ -4,9 +4,14 @@
   margin: 2% auto;
   box-shadow: #ebebeb 1px 1px 3px;
   padding:2%;
+  &__empty-message {
+    font-size: 20px;
+  }
 }
-.searched{
-  border: #557669 1px solid;
-  margin:1%;
-  box-shadow: #669b7c 1px 1px 3px;
+.hanzi {
+  font-size: 30px;
+}
+.material-icons {
+  font-size: 30px;
+  height: 30px;
 }

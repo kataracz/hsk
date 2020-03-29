@@ -1,23 +1,11 @@
 <div class="row">
   <div class="col-sm-12">
-    <app-header (chosenSection)="navigate($event)"></app-header>
+    <app-header></app-header>
   </div>
 </div>
 <div class="row">
-  <div class="col-sm-12" [ngSwitch]="displayedSection">
-    <app-hsk (chosenFunction)="navigate($event)" [src]="'assets/hsk-level-1.json'" *ngSwitchCase="'hsk1'"></app-hsk>
-    <app-hsk (chosenFunction)="navigate($event)" [src]="'assets/hsk-level-2.json'" *ngSwitchCase="'hsk2'"></app-hsk>
-    <app-hsk (chosenFunction)="navigate($event)" [src]="'assets/hsk-level-3.json'" *ngSwitchCase="'hsk3'"></app-hsk>
-    <app-hsk (chosenFunction)="navigate($event)" [src]="'assets/hsk-level-4.json'" *ngSwitchCase="'hsk4'"></app-hsk>
-    <app-hsk (chosenFunction)="navigate($event)" [src]="'assets/hsk-level-5.json'" *ngSwitchCase="'hsk5'"></app-hsk>
-    <app-hsk (chosenFunction)="navigate($event)" [src]="'assets/hsk-level-6.json'" *ngSwitchCase="'hsk6'"></app-hsk>
-    <app-mywords (chosenFunction)="navigate($event)" *ngSwitchCase="'mywords'"></app-mywords>
-    <app-flashcards *ngSwitchCase="'flashcards'"></app-flashcards>
-    <app-quiz *ngSwitchCase="'quiz'"></app-quiz>
-    <app-boardgame *ngSwitchCase="'boardgame'"></app-boardgame>
-    <app-practice (chosenFunction)="navigate($event)" *ngSwitchCase="'practice'"></app-practice>
-    <app-home (chosenSection)="navigate($event)" *ngSwitchDefault></app-home>
-    <app-home (chosenSection)="navigate($event)" *ngSwitchCase="'home'"></app-home>
+  <div class="col-sm-12">
+    <router-outlet></router-outlet>
   </div>
 </div>
 

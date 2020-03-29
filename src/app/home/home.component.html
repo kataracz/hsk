@@ -1,9 +1,7 @@
 <div *ngIf="!IsUserLoggedin()" class="index text-center">
     <h1 >HSK practice</h1><br>
 </div>
-<app-scores (chosenSection)="emit($event)" *ngIf="IsUserLoggedin()"></app-scores>
 <div *ngIf="!IsUserLoggedin()" class="container text-center">
-  <p>Want to see your scores?</p>
   <div class="row text-center">
     <div class="col-sm-6 text-center">
       <app-login></app-login>
@@ -13,16 +11,3 @@
     </div>
   </div>
 </div>
-<div class="container text-center">
-  <p>
-    Useful websites:
-  </p>
-    <a href="https://www.confuciusinstitute.manchester.ac.uk/study/testing/hsk/hsk-learning-resources/"><button type="button" class="btn btn-light">HSK learning resources</button></a>
-    <a href="https://mandarinbean.com/hsk-chinese-test-online/"><button type="button" class="btn btn-light">HSK tests online</button></a>
-    <a href="https://www.purpleculture.net/"><button type="button" class="btn btn-light">Pinyin converter, practice sheets, etc</button></a>
-    <a href="http://www.chinesetest.cn/index.do"><button type="button" class="btn btn-light">HSK official website</button></a>
-  <p>
-    Good Luck!
-  </p>
-</div>
-<footer class="modal-footer">All icons by <a target="_blank" href="https://icons8.com">Icons8</a></footer>

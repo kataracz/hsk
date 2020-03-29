@@ -1,5 +1,4 @@
-import {Component, OnDestroy} from '@angular/core';
-import {ScoresService} from "./scores.service";
+import {Component} from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -8,13 +7,8 @@ import {ScoresService} from "./scores.service";
 })
 export class AppComponent{
   title = 'Hsk practice';
-  displayedSection='';
-  user;
-  navigate(section: string){
-    this.displayedSection=section;
-  }
-  constructor(private score:ScoresService){
 
+  constructor(){
   }
 
 }

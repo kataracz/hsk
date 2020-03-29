@@ -1,27 +1,37 @@
-<div class="text-center container">
-  <div class="card">
-    <div class="hrow text-center" style="overflow: auto;padding:1% 0">
-      <p class="hanzi" id="hanzi" *ngIf="!englishFirst" [style.font-size.px]="card.hanzi.length>3?100:120">{{card.hanzi}}</p>
-      <p *ngIf="englishFirst" style="font-size: 35px" class="translation">{{card.translations[0]}}<br>{{card.translations[1]}}<br>{{card.translations[2]}}</p>
-    </div>
-    <div class="prow text-center">
-      <hr>
-      <p *ngIf="qclicked" class="pinyin">{{card.pinyin}}</p>
-      <img class="questionmark" *ngIf="!qclicked" src="assets/questionmark.png" (click)="wannaKnowPinyin()"/>
-    </div>
-    <div class="trow text-center" style="overflow: auto;padding:2% 0">
-      <hr>
-      <p *ngIf="aclicked&&!englishFirst" style="font-size: 25px" class="translation">{{card.translations[0]}}<br>{{card.translations[1]}}<br>{{card.translations[2]}}</p>
-      <p class="hanzi" *ngIf="englishFirst&&aclicked" [style.font-size.px]="card.hanzi.length>3?70:85">{{card.hanzi}}</p>
-      <button class="btn btn-secondary" *ngIf="!aclicked" (click)="wannaKnowAnswer()">Show answer</button>
-    </div>
+<div class="row">
+  <div class="col-md-12 text-center">
+    <button *ngIf="user.source && user.source.length>=4" [routerLink]="quizLink" type="button" class="btn btn-primary btn-lg --plain">{{'Quiz' | uppercase}}</button>
+    <button *ngIf="user.source && user.source.length>=20" [routerLink]="boardgameLink" type="button" class="btn btn-primary btn-lg --plain">{{'Boardgame' | uppercase}}</button>
   </div>
-  <div style="height: 45px">
-    <img src="/assets/star.png" class="star" style="height:30px;margin:1px"  (click)="this.addWord(this.card)"/><p>Add to My Words</p>
-  </div>
-  <button class="btn btn-secondary" style="margin:1%" (click)="generateCard()">Next card</button><br>
-  <button class="btn btn-secondary" *ngIf="!englishFirst" (click)="wannaKnowEnglishFirst()">I want to guess the hanzi</button>
-  <button class="btn btn-secondary" *ngIf="englishFirst" (click)="wannaKnowEnglishFirst()">I want to guess the english translation</button>
 </div>
-
-
+<div *ngIf="fwords" class="text-center container">
+  <div *ngIf="card" class="card">
+    <div class="card__hrow text-center">
+      <p class="card__hrow__hanzi hanzi" *ngIf="!englishFirst" [style.font-size.px]="card.hanzi.length>3?100:120">{{card.hanzi}}</p>
+      <p *ngIf="englishFirst" class="card__hrow__translation">{{card.translations[0]}}<br>{{card.translations[1]}}<br>{{card.translations[2]}}</p>
+    </div>
+    <div class="card__prow text-center">
+      <hr>
+      <p *ngIf="qclicked" class="card__prow__pinyin">{{card.pinyin}}</p>
+      <i *ngIf="!qclicked" class="material-icons material-icons--dark" (click)="wannaKnowPinyin()">
+        help_outline
+      </i>
+    </div>
+    <div class="card__trow text-center">
+      <hr>
+      <p *ngIf="aclicked&&!englishFirst" class="card__trow__translation">{{card.translations[0]}}<br>{{card.translations[1]}}<br>{{card.translations[2]}}</p>
+      <p class="card__trow__hanzi hanzi" *ngIf="englishFirst&&aclicked" [style.font-size.px]="card.hanzi.length>3?70:85">{{card.hanzi}}</p>
+      <button class="btn btn-primary" *ngIf="!aclicked" (click)="wannaKnowAnswer()">Show answer</button>
+    </div>
+  </div>
+  <div class="actions">
+    <i *ngIf="!isMyWord(this.card)" class="material-icons" (click)="this.addWord(this.card)">favorite_border</i>
+    <i *ngIf="isMyWord(this.card)" class="material-icons" (click)="this.addWord(this.card)">favorite</i>
+    <i class="material-icons" (click)="generateCard()">
+      keyboard_arrow_right
+    </i>
+    <i class="material-icons" (click)="wannaKnowEnglishFirst()">
+      sync
+    </i>
+  </div>
+</div>

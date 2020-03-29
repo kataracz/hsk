@@ -1,7 +1,8 @@
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {HttpClient, HttpErrorResponse} from "@angular/common/http";
-import Speech from 'speak-tts'
 import {Scores, ScoresService} from "../scores.service";
+import {ActivatedRoute, Router} from "@angular/router";
+import {PronounciationService} from "../pronounciation.service";
 
 @Component({
   selector: 'app-quiz',
@@ -18,10 +19,14 @@ export class QuizComponent implements OnInit, OnDestroy {
   scoreToSave:Scores;
   touched=false;
   pinyin=false;
-  speech = new Speech();
-  constructor(private httpService: HttpClient, private scores:ScoresService) {
-    this.qwords=scores.source;
-  }
+  timer=false;
+  timerModeCount = 0 ;
+  counter: { min: number, sec: number };
+  flashcardLink: string;
+  quizLink: string;
+  boardgameLink: string;
+  showTimerCount = false;
+
   shuffle(array) {
     array.sort(() => Math.random() - 0.5);
   }
@@ -43,24 +48,11 @@ export class QuizComponent implements OnInit, OnDestroy {
     this.generateAnswers();
   }
 
-  pronounciation(){
-    this.scores.scores.score-=2;
-
-    let i=0;
-    speechSynthesis.getVoices().forEach(voice => {
-      i++;
-      if(voice.lang=="zh-CN"){
-        this.speech.setVoice(voice.name);
-      }
-    });
-
-    this.speech.speak({
-      text: this.question.hanzi,
-    }).then(() => {
-      console.log("Success !")
-    }).catch(e => {
-      console.error("An error occurred :", e)
-    })
+  pronounciation(word) {
+    this.speech.pronounciation(word);
+  }
+  isMyWord(word){
+    return this.scores.scores.mywords.includes(word);
   }
 
   correct(){
@@ -68,6 +60,9 @@ export class QuizComponent implements OnInit, OnDestroy {
     this.correctAnswer=1;
     setTimeout(()=>{this.generateQuestion();this.correctAnswer=0;},2000);
     clearTimeout();
+    if(this.timer) {
+      this.timerModeCount++;
+    }
 
     this.feedback++;
     this.practiceMore=0;
@@ -102,13 +97,86 @@ export class QuizComponent implements OnInit, OnDestroy {
     return this.scores.scores.score;
   }
 
+  timerMode() {
+    this.timer = true;
+    this.counter = { min: 2, sec: 0 };// choose whatever you want
+    this.ticktock();
+  }
+
+  ticktock(){
+    let intervalId = setInterval(() => {
+      if (this.counter.sec - 1 == -1) {
+        this.counter.min -= 1;
+        this.counter.sec = 59
+      }
+      else this.counter.sec -= 1;
+      if (this.counter.min === 0 && this.counter.sec == 0) {
+        clearInterval(intervalId);
+        this.showTimerCount = true;
+        setTimeout(()=>{this.timer=false; this.showTimerCount=false; this.generateQuestion()},4000);
+        clearTimeout();
+        if (this.timerModeCount > this.scores.scores.bestTimerQuizScore) {
+          this.scores.scores.bestTimerQuizScore = this.timerModeCount;
+        }
+      }
+    }, 1000)
+  }
+
+  constructor(private httpService: HttpClient, public scores:ScoresService, private route: ActivatedRoute,
+              private router: Router, private speech: PronounciationService) {
+    this.qwords=scores.source;
+  }
+
   ngOnInit() {
-    this.generateQuestion();
-    this.speech.init({'lang': 'zh-CN'}).then((data) => {
-      // The "data" object contains the list of available voices and the voice synthesis params
-      console.log("Speech is ready, voices are available", data)
-    }).catch(e => {
-      console.error("An error occured while initializing : ", e)
+    this.route.paramMap.subscribe(params => {
+      var param = params.get('level');
+      if(!param){
+        this.qwords = this.scores.source;
+        this.generateQuestion();
+        if(this.scores.source == this.scores.scores.wordsToPractice){
+          this.flashcardLink = '/practice/flashcards';
+          this.quizLink = '/practice/quiz';
+          this.boardgameLink = '/practice/boardgame';
+        }
+        else if (this.scores.source == this.scores.scores.mywords){
+          this.flashcardLink = '/mywords/flashcards';
+          this.quizLink = '/mywords/quiz';
+          this.boardgameLink = '/mywords/boardgame';
+        }
+      } else {
+        var hskLevel = '/hsk/' + params.get('level');
+        this.flashcardLink = hskLevel + '/flashcards';
+        this.quizLink = hskLevel + '/quiz';
+        this.boardgameLink = hskLevel + '/boardgame';
+        if (this.scores.source) {
+          this.qwords=this.scores.source;
+          this.generateQuestion();
+        }
+        else {
+          this.route.paramMap.subscribe(params => {
+            var hskLevel = '/hsk/' + params.get('level');
+            this.flashcardLink = hskLevel + '/flashcards';
+            this.quizLink = hskLevel + '/quiz';
+            this.boardgameLink = hskLevel + '/boardgame';
+            var src = 'assets/hsk-level-' + params.get('level') + '.json';
+
+            //get data from the JSON files
+            //the JSON files containing the words for each HSK level can be found at https://github.com/gigacool/hanyu-shuiping-kaoshi/
+            //these files are created by a github user named gigacool
+            this.httpService.get(src).subscribe(
+              data => {
+                this.qwords = data as string [];
+                this.scores.source=this.qwords;
+                this.generateQuestion();
+
+              },
+              (err: HttpErrorResponse) => {
+                console.log (err.message);
+              }
+            );
+          });
+        }
+      }
     });
   }
   ngOnDestroy(): void {
@@ -119,7 +187,10 @@ export class QuizComponent implements OnInit, OnDestroy {
         correctAnswers: this.scores.scores.correctAnswers,
         allAnswers: this.scores.scores.allAnswers,
         wordsToPractice: this.scores.scores.wordsToPractice,
-        mywords: this.scores.scores.mywords
+        mywords: this.scores.scores.mywords,
+        bestTimerQuizScore: this.scores.scores.bestTimerQuizScore,
+        whichDay: this.scores.scores.whichDay,
+        lastLogin: this.scores.scores.lastLogin
       };
       this.scores.newScore(this.scoreToSave).then(r => console.log((this.scoreToSave)));
     }

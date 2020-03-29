@@ -1,16 +1,46 @@
 <div class="container text-center">
-  <h2>Welcome back, {{level}}!</h2>
-  <h3>Your scores:</h3><br>
-  <p>Score: {{scores.score}}</p>
-  <p>Correct answers/all answers: <mat-progress-bar mode="determinate" value="{{progress}}" [color]="'#557669'"></mat-progress-bar></p>
-  <p style="margin-top:5%">Achievements:</p>
-  <div class="grid">
-    <div *ngFor="let achievement of achievements" style="margin:2%;display: inline">
-      <p>{{achievement.title}}</p>
-      <img style="height: 100px;" [ngStyle]="{'filter':isAchieved(achievement)}" src="{{achievement.image}}"/>
-      <h5 *ngIf="!achievement.achieved">{{achievement.description}}</h5>
+  <div class="user-info-container text-center row">
+    <div *ngFor="let info of info" class="user-info-container__user-info col col-md-4">
+      <h3>{{info.title | uppercase}}</h3>
+      <p>{{info.data}}</p>
+    </div>
+    <div class="user-info-container__user-info col col-md-4">
+      <h3>{{'Correct answers / all answers' | uppercase}}</h3>
+      <mat-progress-bar mode="determinate" value="{{progress}}"></mat-progress-bar>
+    </div>
+    <div class="user-info-container__user-info col col-md-4">
+      <div *ngIf="achievementClicked" class="user-info-container__user-info__ach-info centered overlay">
+        <p class="description">{{this.achievementInfo.title}}</p>
+        <p class="details">{{this.achievementInfo.desc}}</p>
+      </div>
+      <h3>{{'Achievements' | uppercase}}</h3>
+      <div class="row text-center achievement-container">
+        <div *ngFor="let achievement of achievements" class="col col-xs-2 text-center">
+          <img class="achievement-container__achievement" [ngStyle]="{'filter':isAchieved(achievement)}" src="{{achievement.image}}" (click)="showAchievemntInfo(achievement)"/>
+        </div>
+      </div>
+    </div>
+    <div class="user-info-container__user-info col col-md-4">
+      <h3>{{'Take a look at the words you got wrong' | uppercase}}</h3>
+      <button type="button" class="btn btn-primary btn-lg --plain" routerLink="/practice">{{'Practice' | uppercase}}</button>
+    </div>
+    <div class="user-info-container__user-info col col-md-3">
+      <h3>{{'Charts' | uppercase}}</h3>
+      <p class="description">Your place on the total score chart: {{user.placeOnCharts}}</p>
+    </div>
+    <div class="user-info-container__user-info col col-md-3">
+      <h3>{{'Today you practiced' | uppercase}}</h3>
+      <p>{{playedToday}} mins</p>
+    </div>
+    <div class="user-info-container__user-info col col-md-3">
+      <h3>{{'Practice for 10 minutes today' | uppercase}}</h3>
+      <mat-progress-bar mode="determinate" value="{{playedToday*10}}"></mat-progress-bar>
+    </div>
+    <div class="user-info-container__user-info col col-md-3">
+      <h3>{{'You are on a' | uppercase}}</h3>
+      <p>{{user.scores.whichDay}} day streak</p>
     </div>
   </div>
-
-  <button type="button" class="btn btn-secondary btn-lg" (click)="onSelect('practice')">Practice</button>
 </div>
+
+

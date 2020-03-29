@@ -1,10 +1,11 @@
-import {Component, EventEmitter, HostBinding, Inject, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import { HttpErrorResponse } from '@angular/common/http';
 import {PageEvent} from "@angular/material/paginator";
-import Speech from 'speak-tts'
 import {Scores, ScoresService} from "../scores.service";
 import {NgForm} from "@angular/forms";
+import {ActivatedRoute, Router} from "@angular/router";
+import {PronounciationService} from "../pronounciation.service";
 
 @Component({
   selector: 'app-hsk',
@@ -13,13 +14,17 @@ import {NgForm} from "@angular/forms";
 })
 export class HskComponent implements OnInit, OnDestroy {
   words = [];
-  @Input() public src:string;
-  @Output() chosenFunction= new EventEmitter<string>();
+  src;
+  hskLevel;
   @ViewChild('form',{static:true}) form: NgForm;
   scoreToSave:Scores;
   touched=false;
-  speech = new Speech();
-  searched="";
+  searchedWord="";
+  searched={
+    "pinyin":"",
+    "hanzi":"",
+    "translations":""
+  };
 
   pageIndex=0;
   pageSize=10;
@@ -36,40 +41,14 @@ export class HskComponent implements OnInit, OnDestroy {
     this.displayedWords= this.words.slice(low,high);
   }
 
-  pronounciation(word){
-
-    let i=0;
-    speechSynthesis.getVoices().forEach(voice => {
-      if(voice.lang=="zh-CN"){
-        this.speech.setVoice(voice.name);
-      }
-    });
-
-    this.speech.speak({
-      text: word,
-    }).then(() => {
-      console.log("Success !")
-    }).catch(e => {
-      console.error("An error occurred :", e)
-    })
-  }
-
-  addWord(word:string){
+  addWord(word){
     if(!this.user.scores.mywords.includes(word)) {
       this.user.scores.mywords.push(word);
       this.touched=true;
     }
   }
   isMyWord(word){
-    if(this.user.scores.mywords.includes(word)){
-      return 'none';
-    }else{
-      return 'grayscale(100%)';
-    }
-  }
-  onSelect(section: string){
-    this.chosenFunction.emit(section);
-    this.user.source=this.words;
+    return this.user.scores.mywords.includes(word);
   }
 
   search(){
@@ -80,31 +59,36 @@ export class HskComponent implements OnInit, OnDestroy {
     });
   }
 
-  constructor (private httpService: HttpClient,private user:ScoresService) {
+  pronounciation(word) {
+    this.speech.pronounciation(word);
+  }
+
+  constructor (private httpService: HttpClient,private user:ScoresService, private route: ActivatedRoute,
+               private router: Router,private http: HttpClient, private speech: PronounciationService) {
 
   }
   ngOnInit () {
-    //get data from the JSON files
-    //the JSON files containing the words for each HSK level can be found at https://github.com/gigacool/hanyu-shuiping-kaoshi/
-    //these files are created by a github user named gigacool
-    this.httpService.get(this.src).subscribe(
-      data => {
-        this.words = data as string [];
-        this.displayedWords=this.words.slice(0,10);
-      },
-      (err: HttpErrorResponse) => {
-        console.log (err.message);
-      }
-    );
+    this.route.paramMap.subscribe(params => {
+      this.src = 'assets/hsk-level-' + params.get('level') + '.json';
+      this.hskLevel = 'hsk/' + params.get('level');
 
-    this.speech.init({'lang': 'zh-CN', 'voiceURI': 'Google 普通话（中国大陆）'}).then((data) => {
-      // The "data" object contains the list of available voices and the voice synthesis params
-      console.log("Speech is ready, voices are available", data)
-    }).catch(e => {
-      console.error("An error occured while initializing : ", e)
+      //get data from the JSON files
+      //the JSON files containing the words for each HSK level can be found at https://github.com/gigacool/hanyu-shuiping-kaoshi/
+      //these files are created by a github user named gigacool
+      this.httpService.get(this.src).subscribe(
+        data => {
+          this.words = data as string [];
+          this.user.source=this.words;
+          this.displayedWords=this.words.slice(0,10);
+        },
+        (err: HttpErrorResponse) => {
+          console.log (err.message);
+        }
+      );
     });
   }
   ngOnDestroy(): void {
+
     if(this.user.loggedin==1&&this.touched==true){
       this.scoreToSave={
         id: this.user.scores.id,
@@ -112,7 +96,10 @@ export class HskComponent implements OnInit, OnDestroy {
         correctAnswers: this.user.scores.correctAnswers,
         allAnswers: this.user.scores.allAnswers,
         wordsToPractice: this.user.scores.wordsToPractice,
-        mywords: this.user.scores.mywords
+        mywords: this.user.scores.mywords,
+        bestTimerQuizScore: this.user.scores.bestTimerQuizScore,
+        whichDay: this.user.scores.whichDay,
+        lastLogin: this.user.scores.lastLogin
       };
       this.user.newScore(this.scoreToSave).then(r => console.log((this.scoreToSave)));
     }

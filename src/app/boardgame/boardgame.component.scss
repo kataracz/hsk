@@ -1,19 +1,17 @@
 .container{
   background-color: #f8f8f8;
-  border-radius: 10px;
-  margin: 2% auto;
+  border-radius: 4px;
+  margin: 10px auto;
   box-shadow: #ebebeb 1px 1px 3px;
-  padding:2%;
-
-}
-.grid{
-  display: grid;
-  grid-template-columns: auto auto auto auto;
-  grid-gap:2%;
-}
-.tile{
-  font-size: 150%;
-  padding:2%;
-  border: 1px solid #557669;
-  text-align: center;
+  padding:10px;
+  &__tile-container{
+    margin: 2%;
+    &__tile{
+      font-size: 150%;
+      padding:2%;
+      border: 1px solid #557669;
+      text-align: center;
+      height: fit-content;
+    }
+  }
 }
